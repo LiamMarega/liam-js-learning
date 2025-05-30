@@ -1,0 +1,81 @@
+---
+
+---
+
+<aside>
+  <nav>
+    <button id="draw-btn" title="Pincel" class="active"></button>
+    <button id="erase-btn" title="Borrar"></button>
+    <button id="rectangle-btn" title="Rectángulo"></button>
+    <button id="ellipse-btn" title="Elipse"></button>
+    <button disabled id="picker-btn" title="Capturar Color"></button>
+    <button id="clear-btn" title="Limpiar dibujo"></button>
+    <button id="save-btn" title="Guardar dibujo"></button>
+  </nav>
+</aside>
+
+<style>
+  aside {
+    background: silver;
+    width: 52px;
+    padding-top: 2px;
+    grid-area: aside;
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1px;
+    }
+
+    button {
+      width: 24px;
+      height: 24px;
+
+      background: #bdbdbd url("../../../../assets/icons/draw.png") no-repeat
+        center;
+
+      border: 1.5px solid #eee;
+      border-right-color: #000;
+      border-bottom-color: #000;
+
+      image-rendering: pixelated;
+
+      &.active {
+        background-color: #eee;
+        border-color: #000;
+        border-right-color: #eee;
+        border-bottom-color: #eee;
+      }
+
+      &[disabled] {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+    }
+
+    #erase-btn {
+      background-image: url("../../../../assets/icons/erase.png");
+    }
+
+    #rectangle-btn {
+      background-image: url("../../../../assets/icons/rectangle.png");
+    }
+
+    #ellipse-btn {
+      background-image: url("../../../../assets/icons/ellipse.png");
+    }
+
+    #picker-btn {
+      background-image: url("../../../../assets/icons/picker.png");
+    }
+
+    #clear-btn {
+      background-image: url("../../../../assets/icons/clear.png");
+      background-size: 16px;
+    }
+
+    #save-btn {
+      background-image: url("../../../../assets/icons/save.png");
+    }
+  }
+</style>

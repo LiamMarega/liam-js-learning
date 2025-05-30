@@ -36,7 +36,7 @@
     font-size: var(--font-size-base);
     line-height: 1.5;
     margin: 0;
-    padding: 0;
+    padding: 5%;
   }
   
   /* Utility Classes */

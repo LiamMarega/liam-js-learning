@@ -1,0 +1,153 @@
+---
+import Footer from "./components/footer.astro";
+import Layout from "../../layout/homeLayout.astro";
+import Aside from "./components/aside.astro";
+---
+
+<Layout title="Paint JS">
+  <div class="title flex">
+    <img src="/icon.png" alt="logo" />
+    <h1>Paint JS</h1>
+  </div>
+  <div id="paint-container">
+    <header>
+      <button>File</button>
+      <button>Edit</button>
+      <button>View</button>
+      <button>Tools</button>
+      <button>Image</button>
+      <button>Help</button>
+    </header>
+    <Aside />
+    <main>
+      <canvas id="canvas"></canvas>
+    </main>
+    <Footer />
+  </div>
+</Layout>
+
+<style>
+  #paint-container {
+    border: 1px solid black;
+    padding: 4px;
+    width: 70%;
+    height: 70%;
+    margin: auto;
+    display: grid;
+    grid-template-areas:
+      "header header header"
+      "aside main main"
+      "footer footer footer";
+  }
+  header {
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    grid-area: header;
+  }
+
+  header {
+    padding: 0;
+    background-color: silver;
+    grid-area: header;
+  }
+  canvas {
+    background-color: #ffffff;
+    height: 100%;
+    width: 100%;
+  }
+
+  main {
+    grid-area: main;
+    padding: 2%;
+  }
+
+  button {
+    background-color: transparent;
+    color: black;
+    border: none;
+    padding: 0.3rem;
+
+    &:hover {
+      box-shadow:
+        1px 1px black,
+        inset -1px -1px gray,
+        inset 1px 1px white;
+    }
+  }
+</style>
+
+<script>
+  import { Modes } from ".//types/modes";
+
+  const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+  const colorPicker = document.getElementById(
+    "color-picker"
+  ) as HTMLInputElement;
+  const ctx = canvas?.getContext("2d");
+
+  // STATE
+  let isDrawing = false;
+  let startX, startY;
+  let lastX = 0;
+  let lastY = 0;
+  let mode = Modes.DRAW;
+  let color = colorPicker.value;
+
+  colorPicker.addEventListener("change", () => {
+    console.log("change ", colorPicker.value);
+    color = colorPicker.value;
+    ctx!.strokeStyle = color;
+  });
+
+  // Función para obtener las coordenadas correctas del mouse
+  function getMouseCoordinates(e: MouseEvent) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    return {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY,
+    };
+  }
+
+  // EVENTS
+  canvas?.addEventListener("mousedown", (e) => {
+    isDrawing = true;
+
+    const { x, y } = getMouseCoordinates(e);
+
+    // guardar las coordenadas iniciales
+    [startX, startY] = [x, y];
+    [lastX, lastY] = [x, y];
+  });
+
+  canvas?.addEventListener("mouseup", (e) => {
+    isDrawing = false;
+    lastX = 0;
+    lastY = 0;
+  });
+
+  canvas?.addEventListener("mousemove", (e) => {
+    if (!isDrawing) return;
+
+    const { x, y } = getMouseCoordinates(e);
+
+    // comenzar un trazado
+    ctx?.beginPath();
+
+    // mover el trazado a las coordenadas actuales
+    ctx?.moveTo(lastX, lastY);
+
+    // dibujar una línea entre coordenadas actuales y las nuevas
+    ctx?.lineTo(x, y);
+
+    ctx?.stroke();
+
+    // actualizar la última coordenada utilizada
+    [lastX, lastY] = [x, y];
+
+    return;
+  });
+</script>
