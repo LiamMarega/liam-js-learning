@@ -3,5 +3,6 @@ export const enum Modes {
   ERASE = "erase", 
   RECTANGLE = "rectangle",
   ELLIPSE = "ellipse",
-  PICKER = "picker"
+  PICKER = "picker",
+  SAVE = "save"
 } 
