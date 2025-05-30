@@ -1,0 +1,38 @@
+---
+
+---
+
+<header>
+  <button>File</button>
+  <button>Edit</button>
+  <button>View</button>
+  <button>Tools</button>
+  <button>Image</button>
+  <button>Help</button>
+</header>
+
+<style>
+  header {
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    grid-area: header;
+    padding: 0;
+    background-color: silver;
+    grid-area: header;
+
+    button {
+      background-color: transparent;
+      color: black;
+      border: none;
+      padding: 0.3rem;
+
+      &:hover {
+        box-shadow:
+          1px 1px black,
+          inset -1px -1px gray,
+          inset 1px 1px white;
+      }
+    }
+  }
+</style>
