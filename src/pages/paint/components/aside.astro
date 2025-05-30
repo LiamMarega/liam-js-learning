@@ -17,14 +17,12 @@
 <style>
   aside {
     background: silver;
-    width: 52px;
-    padding-top: 2px;
     grid-area: aside;
-
     nav {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 1px;
+      justify-content: start;
     }
 
     button {

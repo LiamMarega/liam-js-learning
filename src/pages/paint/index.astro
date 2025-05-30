@@ -5,10 +5,10 @@ import Aside from "./components/aside.astro";
 ---
 
 <Layout title="Paint JS">
-  <div class="title flex">
+  <a href="/" class="title">
     <img src="/icon.png" alt="logo" />
-    <h1>Paint JS</h1>
-  </div>
+    <p>Back</p>
+  </a>
   <div id="paint-container">
     <header>
       <button>File</button>
@@ -27,17 +27,25 @@ import Aside from "./components/aside.astro";
 </Layout>
 
 <style>
+  .title {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+  main {
+    grid-area: main;
+  }
   #paint-container {
-    border: 1px solid black;
-    padding: 4px;
+    border: 0.5px solid black;
     width: 70%;
     height: 70%;
     margin: auto;
     display: grid;
+    grid-template-columns: min-content 1fr;
     grid-template-areas:
-      "header header header"
-      "aside main main"
-      "footer footer footer";
+      "header header"
+      "aside main"
+      "footer footer";
   }
   header {
     justify-content: space-between;
@@ -55,11 +63,6 @@ import Aside from "./components/aside.astro";
     background-color: #ffffff;
     height: 100%;
     width: 100%;
-  }
-
-  main {
-    grid-area: main;
-    padding: 2%;
   }
 
   button {
