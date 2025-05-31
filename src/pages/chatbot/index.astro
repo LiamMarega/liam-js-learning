@@ -1,0 +1,89 @@
+---
+import "./styles/styles.css";
+import avatar from "./assets/images/avatar.png";
+import { Image } from "astro:assets";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Chatbot</title>
+  </head>
+  <body>
+    <!-- Templates for messages -->
+    <template id="user-message-template">
+      <div class="message user-message">
+        <div class="message-content">
+          <p></p>
+        </div>
+        <div class="avatar user-avatar">
+          <Image src={avatar} alt="User" />
+        </div>
+      </div>
+    </template>
+
+    <template id="bot-message-template">
+      <div class="message bot-message">
+        <div class="avatar bot-avatar">
+          <Image src={avatar} alt="LiamGPT" />
+        </div>
+        <div class="message-content">
+          <p></p>
+        </div>
+      </div>
+    </template>
+
+    <div class="chat-container">
+      <header class="chat-header">
+        <div class="avatar bot-avatar">
+          <Image src={avatar} alt="LiamGPT" />
+        </div>
+        <div class="header-title">LiamGPT</div>
+      </header>
+
+      <li class="loading">
+        <i></i>
+        <h4>Cargando...</h4>
+        <h5>Esto puede tardar un poco. Paciencia.</h5>
+      </li>
+
+      <div class="chat-messages">
+        <div class="message-grid">
+          <!-- Messages will be dynamically added here using the templates -->
+        </div>
+      </div>
+
+      <div class="chat-input">
+        <small>&nbsp;</small>
+        <div class="input-container">
+          <form id="chat-form">
+            <input placeholder="Type your message..." />
+            <button type="submit" class="send-button">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m22 2-7 20-4-9-9-4Z"></path>
+                <path d="M22 2 11 13"></path>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="./lib/chatbot.ts"></script>
+  </body>
+</html>
