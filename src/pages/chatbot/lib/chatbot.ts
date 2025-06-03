@@ -229,8 +229,7 @@ $form?.addEventListener("submit", async (e) => {
     
     const chunks = await engine.chat.completions.create({
       messages: [...systemPrompts, ...messages],
-      max_tokens: 1000,
-      temperature: 0.7,
+      max_tokens: 1500,
       stream: true
     });
 
