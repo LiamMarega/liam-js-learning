@@ -5,14 +5,23 @@ import { Image } from "astro:assets";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="LiamGPT - Asistente de IA avanzado" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Chatbot</title>
+    <meta name="theme-color" content="#0f0f0f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <title>LiamGPT - AI Assistant</title>
   </head>
   <body>
     <!-- Templates for messages -->
@@ -22,7 +31,7 @@ import { Image } from "astro:assets";
           <p></p>
         </div>
         <div class="avatar user-avatar">
-          <Image src={avatar} alt="User" />
+          <div class="avatar-fallback">TU</div>
         </div>
       </div>
     </template>
@@ -30,7 +39,7 @@ import { Image } from "astro:assets";
     <template id="bot-message-template">
       <div class="message bot-message">
         <div class="avatar bot-avatar">
-          <Image src={avatar} alt="LiamGPT" />
+          <Image src={avatar} alt="LiamGPT" width={40} height={40} />
         </div>
         <div class="message-content">
           <p></p>
@@ -38,36 +47,64 @@ import { Image } from "astro:assets";
       </div>
     </template>
 
+    <template id="typing-indicator-template">
+      <div class="message bot-message">
+        <div class="avatar bot-avatar">
+          <Image src={avatar} alt="LiamGPT" width={40} height={40} />
+        </div>
+        <div class="message-content">
+          <div class="typing-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </template>
+
     <div class="chat-container">
+      <!-- Header -->
       <header class="chat-header">
         <div class="avatar bot-avatar">
-          <Image src={avatar} alt="LiamGPT" />
+          <Image src={avatar} alt="LiamGPT" width={40} height={40} />
         </div>
-        <div class="header-title">LiamGPT</div>
+        <div class="header-info">
+          <div class="header-title">LiamGPT</div>
+          <div class="header-subtitle">Asistente de IA</div>
+        </div>
       </header>
 
-      <li class="loading">
+      <!-- Loading State -->
+      <div class="loading" id="initial-loading">
         <i></i>
-        <h4>Cargando...</h4>
-        <h5>Esto puede tardar un poco. Paciencia.</h5>
-      </li>
+        <h4>Iniciando LiamGPT...</h4>
+        <h5>Preparando tu asistente de IA personalizado</h5>
+      </div>
 
-      <div class="chat-messages">
-        <div class="message-grid">
-          <!-- Messages will be dynamically added here using the templates -->
+      <!-- Messages Container -->
+      <div class="chat-messages" id="chat-messages" style="display: none;">
+        <div class="message-grid" id="message-grid">
+          <!-- Welcome message -->
         </div>
       </div>
 
+      <!-- Input Section -->
       <div class="chat-input">
-        <small>&nbsp;</small>
+        <small id="status-text">Escribe tu mensaje...</small>
         <div class="input-container">
           <form id="chat-form">
-            <input placeholder="Type your message..." />
-            <button type="submit" class="send-button">
+            <input
+              type="text"
+              id="message-input"
+              placeholder="Escribe tu mensaje aquí..."
+              autocomplete="off"
+              spellcheck="true"
+            />
+            <button type="submit" class="send-button" id="send-button" disabled>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -83,6 +120,256 @@ import { Image } from "astro:assets";
         </div>
       </div>
     </div>
+
+    <!-- Enhanced Styles -->
+    <style>
+      /* Additional responsive and interactive styles */
+      .header-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+
+      .header-subtitle {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        font-weight: 400;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .action-button {
+        background: var(--dark-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: var(--text-secondary);
+      }
+
+      .action-button:hover {
+        background: var(--primary-purple);
+        color: white;
+        transform: scale(1.05);
+      }
+
+      .welcome-message {
+        animation: slideIn 0.5s ease-out 0.5s both;
+      }
+
+      /* Typing indicator */
+      .typing-indicator .message-content {
+        padding: 1rem 1.25rem;
+      }
+
+      .typing-dots {
+        display: flex;
+        gap: 0.5rem;
+        padding: 1rem;
+        align-items: center;
+        justify-content: flex-start;
+      }
+
+      .typing-dots span {
+        width: 8px;
+        height: 8px;
+        background: var(--primary-purple);
+        border-radius: 50%;
+        display: inline-block;
+        animation: bounce 1.4s infinite ease-in-out both;
+      }
+
+      .typing-dots span:nth-child(1) {
+        animation-delay: -0.32s;
+      }
+
+      .typing-dots span:nth-child(2) {
+        animation-delay: -0.16s;
+      }
+
+      @keyframes bounce {
+        0%,
+        80%,
+        100% {
+          transform: scale(0);
+        }
+        40% {
+          transform: scale(1);
+        }
+      }
+
+      /* Send button states */
+      .send-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: translateY(-50%) scale(0.9);
+      }
+
+      .send-button:not(:disabled):hover {
+        box-shadow: 0 0 20px rgba(122, 40, 209, 0.5);
+      }
+
+      /* Input focus states */
+      #message-input:focus + .send-button:not(:disabled) {
+        background: linear-gradient(
+          135deg,
+          var(--primary-green),
+          var(--primary-purple)
+        );
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(122, 40, 209, 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(122, 40, 209, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(122, 40, 209, 0);
+        }
+      }
+
+      /* Mobile optimizations */
+      @media (max-width: 640px) {
+        .header-actions {
+          display: none;
+        }
+
+        .header-title {
+          font-size: 1rem;
+        }
+
+        .header-subtitle {
+          font-size: 0.6875rem;
+        }
+      }
+
+      /* Landscape mobile */
+      @media (max-width: 896px) and (orientation: landscape) {
+        .chat-container {
+          height: 100vh;
+        }
+
+        .chat-messages {
+          padding: 1rem;
+        }
+
+        .chat-input {
+          padding: 1rem;
+        }
+      }
+
+      /* Tablet */
+      @media (min-width: 768px) and (max-width: 1024px) {
+        .message {
+          max-width: 80%;
+        }
+      }
+
+      /* Desktop hover effects */
+      @media (hover: hover) {
+        .message:hover .message-content {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .user-message:hover .message-content {
+          box-shadow: 0 12px 40px rgba(187, 247, 208, 0.2);
+        }
+      }
+
+      /* High contrast mode support */
+      @media (prefers-contrast: high) {
+        .message-content {
+          border: 2px solid currentColor;
+        }
+
+        .send-button {
+          border: 2px solid white;
+        }
+      }
+
+      /* Reduced motion support */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+
+    <script>
+      // Enhanced chatbot initialization
+      document.addEventListener("DOMContentLoaded", function () {
+        const loading = document.getElementById(
+          "initial-loading"
+        ) as HTMLElement;
+        const messagesContainer = document.getElementById(
+          "chat-messages"
+        ) as HTMLElement;
+        const messageInput = document.getElementById(
+          "message-input"
+        ) as HTMLInputElement;
+        const sendButton = document.getElementById(
+          "send-button"
+        ) as HTMLButtonElement;
+        const statusText = document.getElementById(
+          "status-text"
+        ) as HTMLElement;
+
+        if (
+          !loading ||
+          !messagesContainer ||
+          !messageInput ||
+          !sendButton ||
+          !statusText
+        ) {
+          console.error("Required DOM elements not found");
+          return;
+        }
+
+        // Simulate loading
+        setTimeout(() => {
+          loading.style.display = "none";
+          messagesContainer.style.display = "block";
+          messageInput.focus();
+        }, 2000);
+
+        // Enable/disable send button based on input
+        messageInput.addEventListener("input", function () {
+          const hasText = this.value.trim().length > 0;
+          sendButton.disabled = !hasText;
+
+          if (hasText) {
+            statusText.textContent = "Presiona Enter para enviar";
+          } else {
+            statusText.textContent = "Escribe tu mensaje...";
+          }
+        });
+
+        // Auto-resize input on mobile
+        if (window.innerWidth <= 640) {
+          messageInput.addEventListener("input", function () {
+            this.style.height = "auto";
+            this.style.height = Math.min(this.scrollHeight, 120) + "px";
+          });
+        }
+      });
+    </script>
 
     <script src="./lib/chatbot.ts"></script>
   </body>
