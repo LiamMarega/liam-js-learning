@@ -1,0 +1,155 @@
+<div id="loading-overlay">
+  <div class="centred">
+    <div class="logo">
+      <img src="/windows-logo.svg" />
+      <div class="ms">Microsoft<sup>®</sup></div>
+      <div class="win">Windows</div>
+      <div class="xp">xp</div>
+    </div>
+    <div class="loader">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+  <div class="copy">Copyright © Microsoft Corporation</div>
+  <div class="title">Microsoft</div>
+</div>
+
+<style>
+  #loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    z-index: 1000;
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  .centred {
+    width: 50%;
+    max-width: 380px;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .logo {
+    overflow: hidden;
+    line-height: 1;
+    color: #efefef;
+  }
+
+  .logo .ms {
+    font-size: 150%;
+  }
+
+  .logo .ms sup {
+    font-size: 40%;
+    font-weight: bold;
+  }
+
+  .logo .win {
+    font-size: 400%;
+    font-weight: bold;
+    float: left;
+    margin-right: 10px;
+    margin-top: -10px;
+  }
+
+  .logo .xp {
+    font-size: 300%;
+    font-weight: bold;
+    color: #ff3300;
+    float: left;
+    margin-top: -20px;
+  }
+
+  .logo img {
+    width: 66.67%;
+    display: block;
+    margin: 0 auto -30px;
+  }
+
+  .loader {
+    position: relative;
+    margin: 10% 15% 5%;
+    width: 66.67%;
+    max-height: 20px;
+    height: 3vh;
+    padding: 3px 2px;
+    border: 1px solid #efefef;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .loader span {
+    display: block;
+    float: left;
+    margin: 0 1px 3px;
+    height: calc(3vh - 6px);
+    max-height: 12px;
+    width: 8px;
+    background-color: #708cf1;
+    background: linear-gradient(
+      #708cf1 0%,
+      #708cf1 40%,
+      #2838c7 70%,
+      #2838c7 100%
+    );
+  }
+
+  .title {
+    font-family: "arial-black", serif;
+    position: absolute;
+    bottom: 12.5%;
+    right: 7.5%;
+    font-weight: bold;
+    font-style: italic;
+    color: #efefef;
+  }
+
+  .copy {
+    position: absolute;
+    bottom: 12.5%;
+    left: 7.5%;
+    color: #efefef;
+  }
+</style>
+
+<script>
+  // Loading animation
+  let x = 1;
+  const int = setInterval(() => {
+    const loader = document.querySelector(".loader");
+    const span = document.querySelectorAll(".loader span")[0];
+    if (!(loader instanceof HTMLElement) || !(span instanceof HTMLElement))
+      return;
+
+    if (x == loader.offsetWidth) x = 0;
+    x += 1;
+    span.style.marginLeft = x + "px";
+  }, 10);
+
+  // Hide loading screen after 5 seconds
+  setTimeout(() => {
+    const loadingOverlay = document.getElementById("loading-overlay");
+    const mainContent = document.getElementById("main-content");
+
+    if (loadingOverlay && mainContent) {
+      loadingOverlay.style.opacity = "0";
+      mainContent.style.opacity = "1";
+
+      // Remove loading overlay after fade out
+      setTimeout(() => {
+        loadingOverlay.style.display = "none";
+        clearInterval(int);
+      }, 500);
+    }
+  }, 5000);
+</script>
+

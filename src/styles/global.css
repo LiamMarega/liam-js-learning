@@ -30,7 +30,7 @@
   }
 
   body {
-    background-color: var(--bg);
+    background-image: url("../../assets/bg/windows-bg.webp");
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -43,7 +43,7 @@
     font-size: var(--font-size-base);
     line-height: 1.5;
     margin: 0;
-    padding: 5vw 5vh;
+    padding: 1vw 1vh;
     box-sizing: border-box;
   }
   

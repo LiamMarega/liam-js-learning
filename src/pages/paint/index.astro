@@ -7,7 +7,7 @@ import Taskbar from "../../components/windows/taskbar.astro";
 ---
 
 <Layout title="Paint JS">
-  <div id="loading-overlay">
+  <!-- <div id="loading-overlay">
     <div class="centred">
       <div class="logo">
         <img src="/windows-logo.svg" />
@@ -23,13 +23,9 @@ import Taskbar from "../../components/windows/taskbar.astro";
     </div>
     <div class="copy">Copyright © Microsoft Corporation</div>
     <div class="title">Microsoft</div>
-  </div>
+  </div> -->
 
-  <div id="main-content" style="opacity: 0">
-    <a href="/" class="title">
-      <img src="/icon.png" alt="logo" />
-      <p>Back</p>
-    </a>
+  <div id="main-content">
     <div id="paint-container">
       <Header />
       <Aside />
@@ -39,7 +35,6 @@ import Taskbar from "../../components/windows/taskbar.astro";
       <Footer />
     </div>
   </div>
-  <Taskbar />
 </Layout>
 
 <style>
@@ -56,12 +51,19 @@ import Taskbar from "../../components/windows/taskbar.astro";
 
   #main-content {
     transition: opacity 0.5s ease-in-out;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
   }
 
   .title {
     display: flex;
     flex-direction: row;
     gap: 10px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
   }
 
   /* Loading styles */
@@ -82,7 +84,7 @@ import Taskbar from "../../components/windows/taskbar.astro";
   }
 
   .logo .ms {
-    font-size: 150%;
+    font-size: clamp(12px, 150%, 24px);
   }
 
   .logo .ms sup {
@@ -91,7 +93,7 @@ import Taskbar from "../../components/windows/taskbar.astro";
   }
 
   .logo .win {
-    font-size: 400%;
+    font-size: clamp(24px, 400%, 48px);
     font-weight: bold;
     float: left;
     margin-right: 10px;
@@ -99,7 +101,7 @@ import Taskbar from "../../components/windows/taskbar.astro";
   }
 
   .logo .xp {
-    font-size: 300%;
+    font-size: clamp(18px, 300%, 36px);
     font-weight: bold;
     color: #ff3300;
     float: left;
@@ -108,6 +110,7 @@ import Taskbar from "../../components/windows/taskbar.astro";
 
   .logo img {
     width: 66.67%;
+    max-width: 250px;
     display: block;
     margin: 0 auto -30px;
   }
@@ -157,26 +160,68 @@ import Taskbar from "../../components/windows/taskbar.astro";
     color: #efefef;
   }
 
-  /* Original styles */
+  /* Paint styles responsive */
   main {
     grid-area: main;
+    height: 100%;
   }
+
   #paint-container {
     border: 0.5px solid black;
-    width: 70%;
-    height: 70%;
-    margin: auto;
+    width: 100%;
+    height: calc(100vh - 40px); /* Ajustar según la altura de la taskbar */
+    margin: 0;
     display: grid;
     grid-template-columns: min-content 1fr;
+    grid-template-rows: auto 1fr auto;
     grid-template-areas:
       "header header"
       "aside main"
       "footer footer";
   }
+
   canvas {
     background-color: #ffffff;
     height: 100%;
     width: 100%;
+    touch-action: none; /* Para soporte táctil */
+  }
+
+  /* Media queries para diferentes tamaños */
+  @media (max-width: 768px) {
+    #paint-container {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto min-content 1fr auto;
+      grid-template-areas:
+        "header"
+        "aside"
+        "main"
+        "footer";
+    }
+
+    canvas {
+      min-height: 300px;
+    }
+  }
+
+  @media (max-height: 600px) {
+    #paint-container {
+      height: calc(100vh - 30px);
+    }
+
+    .logo img {
+      width: 50%;
+      margin-bottom: -15px;
+    }
+
+    .logo .win {
+      font-size: 300%;
+    }
+
+    .logo .xp {
+      font-size: 200%;
+      margin-top: -10px;
+    }
   }
 </style>
 
@@ -200,10 +245,27 @@ import Taskbar from "../../components/windows/taskbar.astro";
   setTimeout(() => {
     const loadingOverlay = document.getElementById("loading-overlay");
     const mainContent = document.getElementById("main-content");
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 
-    if (loadingOverlay && mainContent) {
+    if (loadingOverlay && mainContent && canvas) {
       loadingOverlay.style.opacity = "0";
       mainContent.style.opacity = "1";
+
+      // Ajustar el canvas al tamaño disponible
+      const resizeCanvas = () => {
+        const container = document.getElementById("paint-container");
+        if (!container) return;
+
+        const mainArea = container.querySelector("main");
+        if (!mainArea) return;
+
+        const rect = mainArea.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+      };
+
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
 
       // Remove loading overlay after fade out
       setTimeout(() => {
