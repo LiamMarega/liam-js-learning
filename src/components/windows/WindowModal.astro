@@ -152,11 +152,23 @@ const { title, isOpen, width = "40vw", height = "95vh", path } = Astro.props;
 </style>
 
 <script>
+  let highestZIndex = 1;
+
+  const bringToFront = (window: HTMLElement) => {
+    highestZIndex += 1;
+    window.style.zIndex = highestZIndex.toString();
+  };
+
   // Hacer la ventana arrastrable (mejorado para responsive)
   const windows = document.querySelectorAll(".window");
 
   windows.forEach((window) => {
     if (!(window instanceof HTMLElement)) return;
+
+    // Traer al frente al hacer click en cualquier parte de la ventana
+    window.addEventListener("mousedown", () => {
+      bringToFront(window);
+    });
 
     const titleBar = window.querySelector(".title-bar");
     if (!(titleBar instanceof HTMLElement)) return;
@@ -179,6 +191,7 @@ const { title, isOpen, width = "40vw", height = "95vh", path } = Astro.props;
       windowY = rect.top;
 
       window.style.transition = "none";
+      bringToFront(window);
     });
 
     const handleMove = (e: MouseEvent) => {

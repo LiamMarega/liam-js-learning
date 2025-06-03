@@ -210,7 +210,7 @@ const $$ = (el: string): NodeListOf<Element> => document.querySelectorAll(el);
 
 // Referencias DOM
 const $form = $("#chat-form") as HTMLFormElement;
-const $input = $("input") as HTMLInputElement;
+const $input = $("#message-input") as HTMLInputElement;
 const $sendButton = $("#send-button") as HTMLButtonElement;
 const $messages = $(".message-grid") as HTMLElement;
 const $container = $(".chat-messages") as HTMLElement;
@@ -233,7 +233,7 @@ $form?.addEventListener("submit", async (e) => {
   if (!messageText || messageText.length === 0) return;
 
   // Validar longitud del mensaje
-  if (messageText.length > 500) {
+  if (messageText.length > 300) {
     showTemporaryMessage("⚠️ El mensaje es demasiado largo. Por favor, hazlo más conciso (máximo 500 caracteres).", false);
     return;
   }

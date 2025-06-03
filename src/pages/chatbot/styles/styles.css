@@ -22,6 +22,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   color: var(--text-primary);
   overflow: hidden;
+  height: 100dvh;
 }
 
 /* Chat container */
@@ -325,7 +326,6 @@ small {
   
   .chat-container {
     max-width: 768px;
-    max-height: 90vh;
     border-radius: 1.5rem;
     border: 1px solid var(--border-color);
   }
