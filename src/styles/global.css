@@ -30,7 +30,7 @@
   }
 
   body {
-    background-image: url("../../assets/bg/windows-bg.webp");
+    background-color: var(--bg);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
