@@ -1,4 +1,4 @@
-import { CreateMLCEngine } from "@mlc-ai/web-llm";
+import { CreateWebWorkerMLCEngine } from "@mlc-ai/web-llm";
 
 const SELECTED_MODEL = "Llama-3.2-1B-Instruct-q4f32_1-MLC";
 
@@ -355,39 +355,43 @@ const createMessage = (message: string, isUser: boolean): HTMLElement | null => 
 // Mejorado: Inicialización del motor con mejor manejo de errores
 async function initializeEngine() {
   try {
-    engine = await CreateMLCEngine(SELECTED_MODEL, {
-      initProgressCallback: (progressInfo) => {
-        if ($info) {
-          $info.textContent = `🤖 ${progressInfo.text}`;
-        }
-        
-        if (progressInfo.progress === 1 && !isEngineReady) {
-          isEngineReady = true;
+    engine = await CreateWebWorkerMLCEngine(
+      new Worker(new URL("./worker.ts", import.meta.url), { type: "module" }),
+      SELECTED_MODEL,
+      {
+        initProgressCallback: (progressInfo) => {
+          if ($info) {
+            $info.textContent = `🤖 ${progressInfo.text}`;
+          }
           
-          // Remover loading
-          $loading?.parentNode?.removeChild($loading);
-          
-          // Habilitar inputs
-          toggleInputs(true);
-          
-          // Mensaje de bienvenida mejorado
-          const welcomeMessage = `¡Hola! 👋 Soy LiamGPT, el asistente digital de Liam Marega.
+          if (progressInfo.progress === 1 && !isEngineReady) {
+            isEngineReady = true;
+            
+            // Remover loading
+            $loading?.parentNode?.removeChild($loading);
+            
+            // Habilitar inputs
+            toggleInputs(true);
+            
+            // Mensaje de bienvenida mejorado
+            const welcomeMessage = `¡Hola! 👋 Soy LiamGPT, el asistente digital de Liam Marega.
 
-        🚀 Estoy aquí para contarte sobre la experiencia profesional, proyectos y habilidades técnicas de Liam.
-                
-        💬 Puedes preguntarme sobre:
-        • Experiencia laboral y proyectos
-        • Tecnologías y stack técnico  
-        • Información de contacto
-        • Detalles específicos de desarrollo
-                
-        ¿En qué te puedo ayudar hoy? 😊`;
-          
-          createMessage(welcomeMessage, false);
-          scrollToBottom();
-        }
-      },
-    });
+          🚀 Estoy aquí para contarte sobre la experiencia profesional, proyectos y habilidades técnicas de Liam.
+                  
+          💬 Puedes preguntarme sobre:
+          • Experiencia laboral y proyectos
+          • Tecnologías y stack técnico  
+          • Información de contacto
+          • Detalles específicos de desarrollo
+                  
+          ¿En qué te puedo ayudar hoy? 😊`;
+            
+            createMessage(welcomeMessage, false);
+            scrollToBottom();
+          }
+        },
+      }
+    );
   } catch (error) {
     console.error("Error inicializando el motor:", error);
     if ($info) {
