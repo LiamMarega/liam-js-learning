@@ -51,8 +51,6 @@ import Taskbar from "../../components/windows/taskbar.astro";
 
   #main-content {
     transition: opacity 0.5s ease-in-out;
-    height: 100vh;
-    width: 100vw;
     overflow: hidden;
   }
 
@@ -64,83 +62,6 @@ import Taskbar from "../../components/windows/taskbar.astro";
     top: 10px;
     left: 10px;
     z-index: 100;
-  }
-
-  /* Loading styles */
-  .centred {
-    width: 50%;
-    max-width: 380px;
-    height: auto;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
-  .logo {
-    overflow: hidden;
-    line-height: 1;
-    color: #efefef;
-  }
-
-  .logo .ms {
-    font-size: clamp(12px, 150%, 24px);
-  }
-
-  .logo .ms sup {
-    font-size: 40%;
-    font-weight: bold;
-  }
-
-  .logo .win {
-    font-size: clamp(24px, 400%, 48px);
-    font-weight: bold;
-    float: left;
-    margin-right: 10px;
-    margin-top: -10px;
-  }
-
-  .logo .xp {
-    font-size: clamp(18px, 300%, 36px);
-    font-weight: bold;
-    color: #ff3300;
-    float: left;
-    margin-top: -20px;
-  }
-
-  .logo img {
-    width: 66.67%;
-    max-width: 250px;
-    display: block;
-    margin: 0 auto -30px;
-  }
-
-  .loader {
-    position: relative;
-    margin: 10% 15% 5%;
-    width: 66.67%;
-    max-height: 20px;
-    height: 3vh;
-    padding: 3px 2px;
-    border: 1px solid #efefef;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .loader span {
-    display: block;
-    float: left;
-    margin: 0 1px 3px;
-    height: calc(3vh - 6px);
-    max-height: 12px;
-    width: 8px;
-    background-color: #708cf1;
-    background: linear-gradient(
-      #708cf1 0%,
-      #708cf1 40%,
-      #2838c7 70%,
-      #2838c7 100%
-    );
   }
 
   .title {
@@ -161,15 +82,8 @@ import Taskbar from "../../components/windows/taskbar.astro";
   }
 
   /* Paint styles responsive */
-  main {
-    grid-area: main;
-    height: 100%;
-  }
-
   #paint-container {
     border: 0.5px solid black;
-    width: 100%;
-    height: calc(100vh - 40px); /* Ajustar según la altura de la taskbar */
     margin: 0;
     display: grid;
     grid-template-columns: min-content 1fr;
@@ -178,13 +92,26 @@ import Taskbar from "../../components/windows/taskbar.astro";
       "header header"
       "aside main"
       "footer footer";
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  main {
+    grid-area: main;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
   canvas {
     background-color: #ffffff;
-    height: 100%;
+    flex: 1;
     width: 100%;
-    touch-action: none; /* Para soporte táctil */
+    height: 100%;
+    touch-action: none;
   }
 
   /* Media queries para diferentes tamaños */

@@ -7,7 +7,7 @@ interface Props {
   path: string;
 }
 
-const { title, isOpen, width = "70vw", height = "50vh", path } = Astro.props;
+const { title, isOpen, width = "40vw", height = "95vh", path } = Astro.props;
 ---
 
 <div
@@ -37,6 +37,8 @@ const { title, isOpen, width = "70vw", height = "50vh", path } = Astro.props;
     transform: translate(-50%, -50%);
     width: var(--window-width);
     height: var(--window-height);
+    min-width: 320px;
+    min-height: 240px;
     background: #fff;
     box-shadow:
       inset -1px -1px #00138c,
@@ -49,14 +51,11 @@ const { title, isOpen, width = "70vw", height = "50vh", path } = Astro.props;
     border-top-right-radius: 8px;
     transition: all 0.3s ease;
     display: none;
-    min-width: 320px;
-    min-height: 240px;
-    max-width: 95vw;
-    max-height: 95vh;
   }
 
   .window[data-state="open"] {
-    display: block;
+    display: flex;
+    flex-direction: column;
   }
 
   .title-bar {
@@ -118,7 +117,7 @@ const { title, isOpen, width = "70vw", height = "50vh", path } = Astro.props;
   }
 
   .window-content {
-    height: calc(100% - 27px);
+    flex: 1;
     width: 100%;
     overflow: auto;
     display: flex;
@@ -128,10 +127,6 @@ const { title, isOpen, width = "70vw", height = "50vh", path } = Astro.props;
   /* Media queries para responsive */
   @media (max-width: 768px) {
     .window {
-      width: 100vw !important;
-      height: 100vh !important;
-      min-width: unset;
-      min-height: unset;
       top: 0;
       left: 0;
       transform: none;
@@ -150,10 +145,6 @@ const { title, isOpen, width = "70vw", height = "50vh", path } = Astro.props;
   }
 
   @media (max-height: 500px) {
-    .window {
-      height: 100vh !important;
-    }
-
     .window-content {
       height: calc(100vh - 27px);
     }
@@ -229,7 +220,7 @@ const { title, isOpen, width = "70vw", height = "50vh", path } = Astro.props;
 
     if (minButton) {
       minButton.addEventListener("click", () => {
-        window.style.display = "none";
+        window.dataset.state = "closed";
       });
     }
 

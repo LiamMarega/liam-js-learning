@@ -1,11 +1,13 @@
 ---
 import { Image } from "astro:assets";
-import img1 from "/public/robot-icon/favicon-32x32.png";
+import chatImg from "/public/robot-icon/favicon-32x32.png";
+import paintImg from "/public/icon.png";
 import CardFile from "./card/CardFile.astro";
 ---
 
 <div class="mansory-gallery">
-  <CardFile icon={img1} title="Paint" redirectPath="/paint" />
+  <CardFile icon={paintImg} title="Paint" redirectPath="/paint" />
+  <CardFile icon={chatImg} title="Chatbot" redirectPath="/chatbot" />
 </div>
 
 <style>

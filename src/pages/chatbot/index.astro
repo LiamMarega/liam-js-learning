@@ -1,4 +1,10 @@
 ---
+interface Props {
+  fullscreen?: boolean;
+}
+
+const { fullscreen = true } = Astro.props;
+
 import "./styles/styles.css";
 import avatar from "./assets/images/avatar.png";
 import { Image } from "astro:assets";
@@ -78,7 +84,7 @@ import { Image } from "astro:assets";
       </div>
     </template>
 
-    <div class="chat-container">
+    <div class={`chat-container ${!fullscreen ? "embedded" : ""}`}>
       <!-- Header -->
       <header class="chat-header">
         <div class="avatar bot-avatar">
@@ -140,6 +146,27 @@ import { Image } from "astro:assets";
     <!-- Enhanced Styles -->
     <style>
       /* Additional responsive and interactive styles */
+      .chat-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        border-radius: 0;
+        box-shadow: 0 20px 40px var(--shadow-color);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .chat-container.embedded {
+        height: 100%;
+        padding: 0;
+        border-radius: 0;
+        margin: 0;
+        box-shadow: none;
+        background: transparent;
+      }
+
       .header-info {
         flex: 1;
         display: flex;
