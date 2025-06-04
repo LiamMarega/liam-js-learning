@@ -4,6 +4,7 @@ import Layout from "../layout/homeLayout.astro";
 import WindowModal from "../components/windows/WindowModal.astro";
 import PaintContent from "./paint/index.astro";
 import ChatContent from "./chatbot/index.astro";
+import TranslatorContent from "./translator/index.jsx";
 ---
 
 <Layout title="Paint JS" fullScreen>
@@ -27,18 +28,58 @@ import ChatContent from "./chatbot/index.astro";
   >
     <ChatContent fullscreen={false} />
   </WindowModal>
+  <WindowModal
+    title="Google Search"
+    isOpen={false}
+    width="70vw"
+    height="90vh"
+    path="/google-search"
+  >
+    <iframe
+      src="https://oldgoogle.neocities.org/2009/"
+      width="100%"
+      height="100%"
+      style="border: none;"
+      title="Old Google Search"></iframe>
+  </WindowModal>
+  <WindowModal
+    title="Google Search"
+    isOpen={false}
+    width="70vw"
+    height="70vh"
+    path="/translator"
+  >
+    <TranslatorContent />
+  </WindowModal>
 </Layout>
 
 <script>
-  // Manejar la apertura de la ventana cuando se hace clic en el icono de Paint
   document.addEventListener("DOMContentLoaded", () => {
-    const paintIcon = document.querySelector('[data-path="/paint"]');
-    const paintWindow = document.querySelector('.window[data-path="/paint"]');
-
-    if (paintIcon && paintWindow) {
-      paintIcon.addEventListener("dblclick", () => {
-        paintWindow.setAttribute("data-state", "open");
-      });
+    // Check if we should open a window automatically from a redirect
+    const windowToOpen = sessionStorage.getItem("openWindow");
+    if (windowToOpen) {
+      const targetWindow = document.querySelector(
+        `.window[data-path="${windowToOpen}"]`
+      );
+      if (targetWindow) {
+        targetWindow.setAttribute("data-state", "open");
+        // Clear the flag after opening
+        sessionStorage.removeItem("openWindow");
+      }
     }
+
+    // Add click handlers for all icons
+    const icons = document.querySelectorAll("[data-path]");
+    icons.forEach((icon) => {
+      const path = icon.getAttribute("data-path");
+      if (!path) return;
+
+      const window = document.querySelector(`.window[data-path="${path}"]`);
+      if (icon && window) {
+        icon.addEventListener("dblclick", () => {
+          window.setAttribute("data-state", "open");
+        });
+      }
+    });
   });
 </script>

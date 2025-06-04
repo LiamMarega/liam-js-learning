@@ -1,0 +1,94 @@
+.translator-container {
+    padding: 16px;
+    background: #f0f0f0;
+    font-family: 'MS Sans Serif', sans-serif;
+    font-size: 11px;
+  }
+  
+  .language-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding: 8px;
+    background: #e0e0e0;
+    border: 2px inset #c0c0c0;
+  }
+  
+  .swap-button {
+    background: #c0c0c0;
+    border: 2px outset #c0c0c0;
+    padding: 4px 8px;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  
+  .swap-button:hover {
+    background: #d0d0d0;
+  }
+  
+  .swap-button:active {
+    border: 2px inset #c0c0c0;
+  }
+  
+  .text-areas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .input-section,
+  .output-section {
+    border: 2px inset #c0c0c0;
+    background: white;
+    padding: 8px;
+  }
+  
+  .translation-header {
+    background: #0080ff;
+    color: white;
+    padding: 4px 8px;
+    margin: -8px -8px 8px -8px;
+    font-weight: bold;
+    font-size: 11px;
+  }
+  
+  .file-upload-area {
+    border: 2px dashed #808080;
+    padding: 24px;
+    text-align: center;
+    background: #f8f8f8;
+    margin-bottom: 16px;
+    color: #666;
+  }
+  
+  .translate-section {
+    text-align: center;
+  }
+  
+  .translate-button {
+    background: linear-gradient(to bottom, #ffffff, #e0e0e0);
+    border: 2px outset #c0c0c0;
+    padding: 8px 24px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    min-width: 100px;
+  }
+  
+  .translate-button:hover:not(:disabled) {
+    background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);
+  }
+  
+  .translate-button:active:not(:disabled) {
+    border: 2px inset #c0c0c0;
+    background: linear-gradient(to bottom, #d0d0d0, #f0f0f0);
+  }
+  
+  .translate-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }

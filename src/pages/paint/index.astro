@@ -6,25 +6,15 @@ import Header from "./components/header.astro";
 import Taskbar from "../../components/windows/taskbar.astro";
 ---
 
-<Layout title="Paint JS">
-  <!-- <div id="loading-overlay">
-    <div class="centred">
-      <div class="logo">
-        <img src="/windows-logo.svg" />
-        <div class="ms">Microsoft<sup>®</sup></div>
-        <div class="win">Windows</div>
-        <div class="xp">xp</div>
-      </div>
-      <div class="loader">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </div>
-    <div class="copy">Copyright © Microsoft Corporation</div>
-    <div class="title">Microsoft</div>
-  </div> -->
+<script>
+  // Only redirect if we're actually on the /paint page
+  if (typeof window !== "undefined" && window.location.pathname === "/paint") {
+    sessionStorage.setItem("openWindow", "/paint");
+    window.location.href = "/";
+  }
+</script>
 
+<Layout title="Paint JS">
   <div id="main-content">
     <div id="paint-container">
       <Header />

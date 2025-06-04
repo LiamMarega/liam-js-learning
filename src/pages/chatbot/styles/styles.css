@@ -321,7 +321,7 @@ small {
 /* Responsive design */
 @media (min-width: 640px) {
   body {
-    padding: 2rem;
+    padding: 1rem;
   }
   
   .chat-container {

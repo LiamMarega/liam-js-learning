@@ -1,0 +1,48 @@
+.language-selector {
+    display: flex;
+    align-items: center;
+  }
+  
+  .selector-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 2px inset #c0c0c0;
+    padding: 4px 8px;
+    min-width: 140px;
+  }
+  
+  .globe-icon {
+    font-size: 12px;
+    margin-right: 6px;
+  }
+  
+  .language-select {
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 11px;
+    outline: none;
+    flex: 1;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  
+  .language-select:focus {
+    outline: 1px dotted #000;
+    outline-offset: -2px;
+  }
+  
+  .dropdown-arrow {
+    font-size: 8px;
+    color: #666;
+    pointer-events: none;
+    margin-left: 4px;
+  }
+  
+  .selector-wrapper:hover {
+    background: #f8f8f8;
+  }
