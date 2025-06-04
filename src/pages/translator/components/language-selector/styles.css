@@ -1,6 +1,8 @@
 .language-selector {
     display: flex;
     align-items: center;
+    flex: 1;
+    max-width: 100%;
   }
   
   .selector-wrapper {
@@ -9,13 +11,21 @@
     align-items: center;
     background: white;
     border: 2px inset #c0c0c0;
-    padding: 4px 8px;
+    padding: 6px 10px;
     min-width: 140px;
+    width: 100%;
+    max-width: 200px;
+    box-sizing: border-box;
+    border-radius: 0;
+    transition: background-color 0.15s ease;
   }
   
   .globe-icon {
-    font-size: 12px;
-    margin-right: 6px;
+    font-size: 13px;
+    margin-right: 8px;
+    flex-shrink: 0;
+    color: #0080ff;
+    line-height: 1;
   }
   
   .language-select {
@@ -29,6 +39,13 @@
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 2px 0;
+    color: #333;
+    line-height: 1.2;
   }
   
   .language-select:focus {
@@ -36,13 +53,114 @@
     outline-offset: -2px;
   }
   
+  .language-select option {
+    background: white;
+    color: #333;
+    padding: 4px 8px;
+    font-family: inherit;
+    font-size: 11px;
+  }
+  
   .dropdown-arrow {
-    font-size: 8px;
+    font-size: 10px;
     color: #666;
     pointer-events: none;
-    margin-left: 4px;
+    margin-left: 6px;
+    flex-shrink: 0;
+    line-height: 1;
+    transform: translateY(-1px);
   }
   
   .selector-wrapper:hover {
     background: #f8f8f8;
   }
+  
+  .selector-wrapper:focus-within {
+    background: #f0f0f0;
+    border-color: #999;
+  }
+  
+  /* Media queries for responsive design */
+@media (max-width: 600px) {
+  .language-selector {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .selector-wrapper {
+    min-width: 130px;
+    max-width: 180px;
+    padding: 6px 8px;
+  }
+  
+  .language-select {
+    font-size: 12px;
+  }
+  
+  .globe-icon {
+    font-size: 12px;
+    margin-right: 6px;
+  }
+  
+  .dropdown-arrow {
+    font-size: 9px;
+    margin-left: 4px;
+  }
+}
+  
+  @media (max-width: 500px) {
+  .selector-wrapper {
+    min-width: 110px;
+    max-width: 150px;
+    padding: 5px 6px;
+  }
+  
+  .language-select {
+    font-size: 11px;
+  }
+  
+  .globe-icon {
+    font-size: 11px;
+    margin-right: 4px;
+  }
+  
+  .dropdown-arrow {
+    font-size: 8px;
+    margin-left: 3px;
+  }
+}
+  
+  @media (min-width: 1200px) {
+    .selector-wrapper {
+      min-width: 160px;
+      max-width: 220px;
+      padding: 8px 12px;
+    }
+    
+    .language-select {
+      font-size: 12px;
+    }
+    
+    .globe-icon {
+      font-size: 14px;
+      margin-right: 10px;
+    }
+    
+    .dropdown-arrow {
+      font-size: 11px;
+      margin-left: 8px;
+    }
+  }
+  
+  /* Mejoras específicas para layout vertical en móviles */
+@media (max-width: 600px) {
+  .language-controls .language-selector {
+    width: 100%;
+    max-width: none;
+  }
+  
+  .language-controls .selector-wrapper {
+    max-width: none;
+    width: 100%;
+  }
+}

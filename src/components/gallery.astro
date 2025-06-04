@@ -1,8 +1,9 @@
 ---
 import { Image } from "astro:assets";
 import chatImg from "/public/robot-icon/favicon-32x32.png";
-import googleImg from "/public/assets/file-icons/ie.png";
-import paintImg from "/public/assets/file-icons/paint.webp";
+import googleImg from "/assets/file-icons/ie.png";
+import translatorImg from "/assets/file-icons/translator.png";
+import paintImg from "/assets/file-icons/paint.webp";
 import CardFile from "./card/CardFile.astro";
 ---
 
@@ -14,7 +15,11 @@ import CardFile from "./card/CardFile.astro";
   />
   <CardFile icon={paintImg} title="Paint" redirectPath="/paint" />
   <CardFile icon={chatImg} title="Chatbot" redirectPath="/chatbot" />
-  <CardFile icon={chatImg} title="Translator" redirectPath="/translator" />
+  <CardFile
+    icon={translatorImg}
+    title="Translator"
+    redirectPath="/translator"
+  />
 </div>
 
 <style>

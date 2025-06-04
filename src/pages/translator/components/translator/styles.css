@@ -1,18 +1,28 @@
 .translator-container {
-    padding: 16px;
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    padding: 12px;
     background: #f0f0f0;
     font-family: 'MS Sans Serif', sans-serif;
     font-size: 11px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 12px;
   }
   
   .language-controls {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
+    justify-content: space-between;
+    gap: 8px;
     padding: 8px;
     background: #e0e0e0;
     border: 2px inset #c0c0c0;
+    flex-wrap: wrap;
+    flex-shrink: 0;
   }
   
   .swap-button {
@@ -22,6 +32,9 @@
     font-size: 14px;
     cursor: pointer;
     font-family: inherit;
+    min-width: 40px;
+    flex-shrink: 0;
+    order: 2;
   }
   
   .swap-button:hover {
@@ -33,10 +46,12 @@
   }
   
   .text-areas {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
   }
   
   .input-section,
@@ -44,6 +59,11 @@
     border: 2px inset #c0c0c0;
     background: white;
     padding: 8px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 200px;
+    overflow: hidden;
   }
   
   .translation-header {
@@ -53,6 +73,7 @@
     margin: -8px -8px 8px -8px;
     font-weight: bold;
     font-size: 11px;
+    flex-shrink: 0;
   }
   
   .file-upload-area {
@@ -62,10 +83,13 @@
     background: #f8f8f8;
     margin-bottom: 16px;
     color: #666;
+    flex-shrink: 0;
   }
   
   .translate-section {
     text-align: center;
+    flex-shrink: 0;
+    margin-top: auto;
   }
   
   .translate-button {
@@ -91,4 +115,141 @@
   .translate-button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+  }
+  
+  /* Responsive breakpoints para diferentes tamaños de modal */
+  @media (max-width: 600px) {
+    .translator-container {
+      padding: 8px;
+      gap: 8px;
+    }
+    
+    .language-controls {
+      flex-direction: column;
+      gap: 6px;
+      padding: 6px;
+    }
+    
+    .text-areas {
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .input-section,
+    .output-section {
+      min-height: 150px;
+    }
+    
+    .swap-button {
+      order: 0;
+      transform: rotate(90deg);
+      align-self: center;
+    }
+  }
+  
+  /* Para contenedores muy pequeños (modal estrecho) */
+  @media (max-width: 500px) {
+    .translator-container {
+      padding: 6px;
+      gap: 6px;
+    }
+    
+    .language-controls {
+      padding: 4px;
+      gap: 4px;
+    }
+    
+    .text-areas {
+      gap: 6px;
+    }
+    
+    .input-section,
+    .output-section {
+      padding: 6px;
+      min-height: 120px;
+    }
+    
+    .translate-button {
+      padding: 6px 16px;
+      min-width: 80px;
+      font-size: 10px;
+    }
+  }
+  
+  /* Para contenedores medianos */
+  @media (min-width: 601px) and (max-width: 800px) {
+    .text-areas {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .input-section,
+    .output-section {
+      min-height: 180px;
+    }
+  }
+  
+  /* Para contenedores con altura limitada */
+  @media (max-height: 600px) {
+    .translator-container {
+      gap: 8px;
+    }
+    
+    .input-section,
+    .output-section {
+      min-height: 100px;
+    }
+  }
+  
+  @media (max-height: 500px) {
+    .translator-container {
+      padding: 4px;
+      gap: 4px;
+    }
+    
+    .language-controls {
+      padding: 3px;
+    }
+    
+    .input-section,
+    .output-section {
+      min-height: 80px;
+      padding: 4px;
+    }
+  }
+  
+  /* Reglas específicas para el modal */
+  .window .translator-container {
+    height: 100%;
+    max-height: none;
+  }
+  
+  /* Si el contenedor padre es menor a 600px de ancho, siempre usar layout vertical */
+  @container (max-width: 600px) {
+    .text-areas {
+      flex-direction: column !important;
+    }
+    
+    .swap-button {
+      transform: rotate(90deg);
+      order: 0;
+    }
+  }
+  
+  /* Container queries como fallback */
+  .translator-container {
+    container-type: inline-size;
+  }
+  
+  @supports (container-type: inline-size) {
+    @container (max-width: 600px) {
+      .text-areas {
+        flex-direction: column;
+      }
+      
+      .swap-button {
+        transform: rotate(90deg);
+        order: 0;
+      }
+    }
   }
