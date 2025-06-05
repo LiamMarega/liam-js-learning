@@ -9,16 +9,17 @@ declare global {
   }
 }
 
-const canvas = document.getElementById("canvas") as HTMLCanvasElement | null;
-const colorPicker = document.getElementById("color-picker") as HTMLInputElement | null;
-const ctx = canvas?.getContext("2d") as CanvasRenderingContext2D | null;
-const clearBtn = document.getElementById("clear-btn") as HTMLButtonElement | null;
-const saveBtn = document.getElementById("save-btn") as HTMLButtonElement | null;
-const drawBtn = document.getElementById("draw-btn") as HTMLButtonElement | null;
-const eraseBtn = document.getElementById("erase-btn") as HTMLButtonElement | null;
-const rectangleBtn = document.getElementById("rectangle-btn") as HTMLButtonElement | null;
-const circleBtn = document.getElementById("ellipse-btn") as HTMLButtonElement | null;
-const pickerBtn = document.getElementById("picker-btn") as HTMLButtonElement | null;
+// DOM elements - initialized when available
+let canvas: HTMLCanvasElement | null = null;
+let colorPicker: HTMLInputElement | null = null;
+let ctx: CanvasRenderingContext2D | null = null;
+let clearBtn: HTMLButtonElement | null = null;
+let saveBtn: HTMLButtonElement | null = null;
+let drawBtn: HTMLButtonElement | null = null;
+let eraseBtn: HTMLButtonElement | null = null;
+let rectangleBtn: HTMLButtonElement | null = null;
+let circleBtn: HTMLButtonElement | null = null;
+let pickerBtn: HTMLButtonElement | null = null;
 
 // STATE
 let isDrawing: boolean = false;
@@ -27,15 +28,38 @@ let lastX: number = 0;
 let lastY: number = 0;
 let mode: Modes = Modes.DRAW;
 let previousMode: Modes = Modes.DRAW;
-let color: string = colorPicker ? colorPicker.value : "#000000";
+let color: string = "#000000";
 let imageData: ImageData | undefined;
+
+// Initialize DOM elements
+function initializeDOMElements() {
+  if (typeof document === 'undefined') return false;
+  
+  canvas = document.getElementById("canvas") as HTMLCanvasElement | null;
+  colorPicker = document.getElementById("color-picker") as HTMLInputElement | null;
+  ctx = canvas?.getContext("2d") as CanvasRenderingContext2D | null;
+  clearBtn = document.getElementById("clear-btn") as HTMLButtonElement | null;
+  saveBtn = document.getElementById("save-btn") as HTMLButtonElement | null;
+  drawBtn = document.getElementById("draw-btn") as HTMLButtonElement | null;
+  eraseBtn = document.getElementById("erase-btn") as HTMLButtonElement | null;
+  rectangleBtn = document.getElementById("rectangle-btn") as HTMLButtonElement | null;
+  circleBtn = document.getElementById("ellipse-btn") as HTMLButtonElement | null;
+  pickerBtn = document.getElementById("picker-btn") as HTMLButtonElement | null;
+  
+  // Initialize color from color picker
+  if (colorPicker) {
+    color = colorPicker.value;
+  }
+  
+  return true;
+}
 
 // Modularized: Color Picker Handler
 function handleColorChange() {
   if (!colorPicker) return;
   colorPicker.addEventListener("change", () => {
-    console.log("change ", colorPicker.value);
-    color = colorPicker.value;
+    console.log("change ", colorPicker!.value);
+    color = colorPicker!.value;
     if (ctx) ctx.strokeStyle = color;
   });
 }
@@ -130,8 +154,11 @@ function draw(e: MouseEvent) {
 function changeMode(newMode: Modes, btn: HTMLButtonElement) {
   previousMode = mode;
   mode = newMode;
-  const activeBtn = document.querySelector(".active");
-  if (activeBtn) activeBtn.classList.remove("active");
+  
+  if (typeof document !== 'undefined') {
+    const activeBtn = document.querySelector(".active");
+    if (activeBtn) activeBtn.classList.remove("active");
+  }
   btn.classList.add("active");
 
   if (ctx && canvas) {
@@ -140,10 +167,12 @@ function changeMode(newMode: Modes, btn: HTMLButtonElement) {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const link = document.createElement('a');
-    link.href = canvas.toDataURL()
-    link.download = 'my-paint.png';
-    link.click()
+    if (typeof document !== 'undefined') {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL();
+      link.download = 'my-paint.png';
+      link.click();
+    }
     changeMode(Modes.DRAW, drawBtn!);
     return
   }
@@ -167,7 +196,7 @@ function changeMode(newMode: Modes, btn: HTMLButtonElement) {
 
         eyeDropper.open().then(result => {
           const { sRGBHex } = result
-          ctx.strokeStyle = sRGBHex
+          if (ctx) ctx.strokeStyle = sRGBHex
           colorPicker!.value = sRGBHex
           changeMode(Modes.DRAW, drawBtn!)
         }).catch(e => {
@@ -191,18 +220,24 @@ function setPickerColor(color: string) {
 
 // Modularized: Attach All Event Listeners
 export function attachEventListeners() {
+  // Initialize DOM elements first
+  if (!initializeDOMElements()) return;
+  
   if (canvas) {
     canvas.addEventListener("mousedown", handleMouseDown);
     canvas.addEventListener("mouseup", handleMouseUp);
     canvas.addEventListener("mousemove", draw);
-    clearBtn?.addEventListener("click", clearCanvas);
-    drawBtn?.addEventListener("click", () => changeMode(Modes.DRAW, drawBtn));
-    eraseBtn?.addEventListener("click", () => changeMode(Modes.ERASE, eraseBtn));
-    rectangleBtn?.addEventListener("click", () => changeMode(Modes.RECTANGLE, rectangleBtn));
-    circleBtn?.addEventListener("click", () => changeMode(Modes.ELLIPSE, circleBtn));
-    pickerBtn?.addEventListener("click", () => changeMode(Modes.PICKER, pickerBtn));
-    saveBtn?.addEventListener("click", () => changeMode(Modes.SAVE, saveBtn));
   }
+  
+  // Add null checks for all buttons
+  if (clearBtn) clearBtn.addEventListener("click", clearCanvas);
+  if (drawBtn) drawBtn.addEventListener("click", () => changeMode(Modes.DRAW, drawBtn!));
+  if (eraseBtn) eraseBtn.addEventListener("click", () => changeMode(Modes.ERASE, eraseBtn!));
+  if (rectangleBtn) rectangleBtn.addEventListener("click", () => changeMode(Modes.RECTANGLE, rectangleBtn!));
+  if (circleBtn) circleBtn.addEventListener("click", () => changeMode(Modes.ELLIPSE, circleBtn!));
+  if (pickerBtn) pickerBtn.addEventListener("click", () => changeMode(Modes.PICKER, pickerBtn!));
+  if (saveBtn) saveBtn.addEventListener("click", () => changeMode(Modes.SAVE, saveBtn!));
+  
   handleColorChange();
 }
 

@@ -122,8 +122,8 @@
 <script is:inline>
   let x = 1;
   let int = setInterval(() => {
-    const loader = document.querySelector(".loader");
-    const span = document.querySelectorAll(".loader span")[0];
+    const loader = document?.querySelector(".loader");
+    const span = document?.querySelectorAll(".loader span")[0];
     if (!(loader instanceof HTMLElement) || !(span instanceof HTMLElement))
       return;
 

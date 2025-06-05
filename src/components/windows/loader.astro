@@ -125,8 +125,8 @@
   // Loading animation
   let x = 1;
   const int = setInterval(() => {
-    const loader = document.querySelector(".loader");
-    const span = document.querySelectorAll(".loader span")[0];
+    const loader = document?.querySelector(".loader");
+    const span = document?.querySelectorAll(".loader span")[0];
     if (!(loader instanceof HTMLElement) || !(span instanceof HTMLElement))
       return;
 
@@ -137,8 +137,8 @@
 
   // Hide loading screen after 5 seconds
   setTimeout(() => {
-    const loadingOverlay = document.getElementById("loading-overlay");
-    const mainContent = document.getElementById("main-content");
+    const loadingOverlay = document?.getElementById("loading-overlay");
+    const mainContent = document?.getElementById("main-content");
 
     if (loadingOverlay && mainContent) {
       loadingOverlay.style.opacity = "0";
@@ -152,4 +152,3 @@
     }
   }, 5000);
 </script>
-

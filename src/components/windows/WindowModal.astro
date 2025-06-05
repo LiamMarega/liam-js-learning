@@ -160,7 +160,7 @@ const { title, isOpen, width = "40vw", height = "95vh", path } = Astro.props;
   };
 
   // Hacer la ventana arrastrable (mejorado para responsive)
-  const windows = document.querySelectorAll(".window");
+  const windows = document?.querySelectorAll(".window");
 
   windows.forEach((window) => {
     if (!(window instanceof HTMLElement)) return;
@@ -220,9 +220,9 @@ const { title, isOpen, width = "40vw", height = "95vh", path } = Astro.props;
       window.style.transform = "none";
     };
 
-    document.addEventListener("mousemove", handleMove);
+    document?.addEventListener("mousemove", handleMove);
 
-    document.addEventListener("mouseup", () => {
+    document?.addEventListener("mouseup", () => {
       isDragging = false;
       window.style.transition = "all 0.3s ease";
     });

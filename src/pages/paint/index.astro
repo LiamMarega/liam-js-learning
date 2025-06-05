@@ -148,8 +148,8 @@ import Taskbar from "../../components/windows/taskbar.astro";
   // Loading animation
   let x = 1;
   const int = setInterval(() => {
-    const loader = document.querySelector(".loader");
-    const span = document.querySelectorAll(".loader span")[0];
+    const loader = document?.querySelector(".loader");
+    const span = document?.querySelectorAll(".loader span")[0];
     if (!(loader instanceof HTMLElement) || !(span instanceof HTMLElement))
       return;
 
@@ -160,9 +160,9 @@ import Taskbar from "../../components/windows/taskbar.astro";
 
   // Hide loading screen after 5 seconds
   setTimeout(() => {
-    const loadingOverlay = document.getElementById("loading-overlay");
-    const mainContent = document.getElementById("main-content");
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const loadingOverlay = document?.getElementById("loading-overlay");
+    const mainContent = document?.getElementById("main-content");
+    const canvas = document?.getElementById("canvas") as HTMLCanvasElement;
 
     if (loadingOverlay && mainContent && canvas) {
       loadingOverlay.style.opacity = "0";
@@ -170,7 +170,7 @@ import Taskbar from "../../components/windows/taskbar.astro";
 
       // Ajustar el canvas al tamaño disponible
       const resizeCanvas = () => {
-        const container = document.getElementById("paint-container");
+        const container = document?.getElementById("paint-container");
         if (!container) return;
 
         const mainArea = container.querySelector("main");

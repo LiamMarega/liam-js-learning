@@ -90,7 +90,7 @@ const { icon, title, redirectPath } = Astro.props;
   let clickCount = 0;
 
   // Obtener todos los elementos file-icon
-  const fileIcons = document.querySelectorAll(
+  const fileIcons = document?.querySelectorAll(
     ".file-icon"
   ) as NodeListOf<HTMLElement>;
 
@@ -123,7 +123,7 @@ const { icon, title, redirectPath } = Astro.props;
         // Obtener la ventana modal correspondiente y abrirla
         const path = fileIcon.getAttribute("data-path");
         if (path) {
-          const modalWindow = document.querySelector(
+          const modalWindow = document?.querySelector(
             `.window[data-path="${path}"]`
           );
           if (modalWindow instanceof HTMLElement) {
@@ -138,7 +138,7 @@ const { icon, title, redirectPath } = Astro.props;
       e.preventDefault();
       const path = fileIcon.getAttribute("data-path");
       if (path) {
-        const modalWindow = document.querySelector(
+        const modalWindow = document?.querySelector(
           `.window[data-path="${path}"]`
         );
         if (modalWindow instanceof HTMLElement) {
@@ -153,7 +153,7 @@ const { icon, title, redirectPath } = Astro.props;
         e.preventDefault();
         const path = fileIcon.getAttribute("data-path");
         if (path) {
-          const modalWindow = document.querySelector(
+          const modalWindow = document?.querySelector(
             `.window[data-path="${path}"]`
           );
           if (modalWindow instanceof HTMLElement) {
@@ -168,7 +168,7 @@ const { icon, title, redirectPath } = Astro.props;
   });
 
   // Manejar deselección al hacer click fuera
-  document.addEventListener("click", (e) => {
+  document?.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
     if (!target.closest(".file-icon")) {
       fileIcons.forEach((icon) => icon.classList.remove("selected"));

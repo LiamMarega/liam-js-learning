@@ -1,7 +1,10 @@
 import { WebWorkerMLCEngineHandler } from "@mlc-ai/web-llm";
 
-const handler = new WebWorkerMLCEngineHandler();
+// Only execute in worker environment
+if (typeof self !== 'undefined' && typeof importScripts !== 'undefined') {
+  const handler = new WebWorkerMLCEngineHandler();
 
-self.onmessage = (msg: MessageEvent) => {
-    handler.onmessage(msg);
-};
+  self.onmessage = (msg: MessageEvent) => {
+      handler.onmessage(msg);
+  };
+}

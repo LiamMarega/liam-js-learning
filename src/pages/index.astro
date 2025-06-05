@@ -54,11 +54,11 @@ import TranslatorContent from "./translator/index.jsx";
 </Layout>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  document?.addEventListener("DOMContentLoaded", () => {
     // Check if we should open a window automatically from a redirect
     const windowToOpen = sessionStorage.getItem("openWindow");
     if (windowToOpen) {
-      const targetWindow = document.querySelector(
+      const targetWindow = document?.querySelector(
         `.window[data-path="${windowToOpen}"]`
       );
       if (targetWindow) {
@@ -69,12 +69,12 @@ import TranslatorContent from "./translator/index.jsx";
     }
 
     // Add click handlers for all icons
-    const icons = document.querySelectorAll("[data-path]");
+    const icons = document?.querySelectorAll("[data-path]");
     icons.forEach((icon) => {
       const path = icon.getAttribute("data-path");
       if (!path) return;
 
-      const window = document.querySelector(`.window[data-path="${path}"]`);
+      const window = document?.querySelector(`.window[data-path="${path}"]`);
       if (icon && window) {
         icon.addEventListener("dblclick", () => {
           window.setAttribute("data-state", "open");

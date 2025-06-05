@@ -205,23 +205,48 @@ type ChatMessage = {
 let messages: ChatMessage[] = [];
 
 // Utilidades DOM mejoradas
-const $ = (el: string): HTMLElement | null => document.querySelector(el);
-const $$ = (el: string): NodeListOf<Element> => document.querySelectorAll(el);
+const $ = (el: string): HTMLElement | null => {
+  if (typeof document === 'undefined') return null;
+  return document?.querySelector(el);
+};
+const $$ = (el: string): NodeListOf<Element> | null => {
+  if (typeof document === 'undefined') return null;
+  return document?.querySelectorAll(el);
+};
 
-// Referencias DOM
-const $form = $("#chat-form") as HTMLFormElement;
-const $input = $("#message-input") as HTMLInputElement;
-const $sendButton = $("#send-button") as HTMLButtonElement;
-const $messages = $(".message-grid") as HTMLElement;
-const $container = $(".chat-messages") as HTMLElement;
-const $info = $('small') as HTMLElement;
-const $loading = $('li.loading') as HTMLElement;
+// Referencias DOM - se inicializan cuando el DOM está disponible
+let $form: HTMLFormElement | null = null;
+let $input: HTMLInputElement | null = null;
+let $sendButton: HTMLButtonElement | null = null;
+let $messages: HTMLElement | null = null;
+let $container: HTMLElement | null = null;
+let $info: HTMLElement | null = null;
+let $loading: HTMLElement | null = null;
 
 let engine: any;
 let isEngineReady = false;
 
-// Mejorado: Manejo de eventos más robusto
-$form?.addEventListener("submit", async (e) => {
+// Función para inicializar referencias DOM
+function initializeDOMReferences() {
+  if (typeof document === 'undefined') return false;
+  
+  $form = $("#chat-form") as HTMLFormElement;
+  $input = $("#message-input") as HTMLInputElement;
+  $sendButton = $("#send-button") as HTMLButtonElement;
+  $messages = $(".message-grid") as HTMLElement;
+  $container = $(".chat-messages") as HTMLElement;
+  $info = $('small') as HTMLElement;
+  $loading = $('li.loading') as HTMLElement;
+  
+  return true;
+}
+
+// Función para inicializar event listeners
+function initializeEventListeners() {
+  if (!$form || !$input) return;
+  
+  // Mejorado: Manejo de eventos más robusto
+  $form.addEventListener("submit", async (e: Event) => {
   e.preventDefault();
   
   if (!isEngineReady) {
@@ -229,7 +254,9 @@ $form?.addEventListener("submit", async (e) => {
     return;
   }
 
-  const messageText = $input?.value.trim();
+  if (!$input) return;
+  
+  const messageText = $input.value?.trim();
   if (!messageText || messageText.length === 0) return;
 
   // Validar longitud del mensaje
@@ -307,7 +334,16 @@ $form?.addEventListener("submit", async (e) => {
     toggleInputs(true);
     scrollToBottom();
   }
-});
+  });
+
+  // Atajos de teclado
+  $input?.addEventListener("keydown", (e: KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      $form?.dispatchEvent(new Event("submit"));
+    }
+  });
+}
 
 // Nuevo: Función para mostrar mensajes temporales
 function showTemporaryMessage(message: string, isUser: boolean) {
@@ -433,18 +469,28 @@ async function initializeEngine() {
   }
 }
 
-// Nuevo: Atajos de teclado
-$input?.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    $form?.dispatchEvent(new Event("submit"));
-  }
-});
-
-// Nuevo: Auto-focus en el input
-window.addEventListener("load", () => {
+// Función de inicialización principal
+function initialize() {
+  if (typeof window === 'undefined') return;
+  
+  // Inicializar referencias DOM
+  if (!initializeDOMReferences()) return;
+  
+  // Inicializar event listeners
+  initializeEventListeners();
+  
+  // Auto-focus en el input
   $input?.focus();
-});
+  
+  // Inicializar motor de IA
+  initializeEngine();
+}
 
-// Inicializar
-initializeEngine();
+// Inicializar cuando el DOM esté listo
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialize);
+  } else {
+    initialize();
+  }
+}
