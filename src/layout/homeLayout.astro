@@ -1,5 +1,6 @@
 ---
 import Taskbar from "../components/windows/taskbar.astro";
+import Loader from "../components/windows/loader.astro";
 import "../styles/global.css";
 
 export interface Props {
@@ -21,7 +22,36 @@ const { title, fullScreen = false } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <slot />
-    {fullScreen && <Taskbar />}
+    <Loader />
+    <div id="home-main-content" style="opacity: 0;">
+      <slot />
+      {fullScreen && <Taskbar />}
+    </div>
   </body>
 </html>
+
+<script>
+  document?.addEventListener("DOMContentLoaded", () => {
+    // Loader logic: show for 3.5 seconds, then transition
+    setTimeout(() => {
+      const loadingOverlay = document?.getElementById("loading-overlay");
+      const mainContent = document?.getElementById("home-main-content");
+
+      if (loadingOverlay && mainContent) {
+        // Start transition: fade out loader, fade in main content
+        loadingOverlay.style.transition = "opacity 500ms ease-in-out";
+        mainContent.style.transition = "opacity 500ms ease-in-out";
+
+        loadingOverlay.style.opacity = "0";
+        mainContent.style.opacity = "1";
+
+        // Remove loader from DOM after transition
+        setTimeout(() => {
+          if (loadingOverlay.parentNode) {
+            loadingOverlay.parentNode.removeChild(loadingOverlay);
+          }
+        }, 500);
+      }
+    }, 3500);
+  });
+</script>

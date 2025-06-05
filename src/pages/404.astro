@@ -2,6 +2,21 @@
 
 ---
 
+<script>
+  // Only redirect if we're actually on the /paint page
+  if (typeof window !== "undefined" && window.location.pathname === "/paint") {
+    sessionStorage.setItem("openWindow", "/paint");
+    window.location.href = "/";
+  }
+  if (
+    typeof window !== "undefined" &&
+    window.location.pathname === "/chatbot"
+  ) {
+    sessionStorage.setItem("openWindow", "/chatbot");
+    window.location.href = "/";
+  }
+</script>
+
 <html lang="es">
   <head>
     <meta charset="UTF-8" />

@@ -18,6 +18,7 @@
 
 <style>
   #loading-overlay {
+    cursor: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -122,7 +123,7 @@
 </style>
 
 <script>
-  // Loading animation
+  // Loading animation only
   let x = 1;
   const int = setInterval(() => {
     const loader = document?.querySelector(".loader");
@@ -135,20 +136,20 @@
     span.style.marginLeft = x + "px";
   }, 10);
 
-  // Hide loading screen after 5 seconds
-  setTimeout(() => {
-    const loadingOverlay = document?.getElementById("loading-overlay");
-    const mainContent = document?.getElementById("main-content");
+  // Clean up interval when loading overlay is removed
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === "childList") {
+        mutation.removedNodes.forEach((node) => {
+          if (node instanceof HTMLElement && node.id === "loading-overlay") {
+            clearInterval(int);
+            observer.disconnect();
+          }
+        });
+      }
+    });
+  });
 
-    if (loadingOverlay && mainContent) {
-      loadingOverlay.style.opacity = "0";
-      mainContent.style.opacity = "1";
-
-      // Remove loading overlay after fade out
-      setTimeout(() => {
-        loadingOverlay.style.display = "none";
-        clearInterval(int);
-      }, 500);
-    }
-  }, 5000);
+  // Observe the document body for removed nodes
+  observer.observe(document.body, { childList: true });
 </script>

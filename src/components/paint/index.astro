@@ -6,26 +6,16 @@ import Header from "./components/header.astro";
 import Taskbar from "../../components/windows/taskbar.astro";
 ---
 
-<script>
-  // Only redirect if we're actually on the /paint page
-  if (typeof window !== "undefined" && window.location.pathname === "/paint") {
-    sessionStorage.setItem("openWindow", "/paint");
-    window.location.href = "/";
-  }
-</script>
-
-<Layout title="Paint JS">
-  <div id="main-content">
-    <div id="paint-container">
-      <Header />
-      <Aside />
-      <main>
-        <canvas id="canvas"></canvas>
-      </main>
-      <Footer />
-    </div>
+<div id="paint-main-content">
+  <div id="paint-container">
+    <Header />
+    <Aside />
+    <main>
+      <canvas id="canvas"></canvas>
+    </main>
+    <Footer />
   </div>
-</Layout>
+</div>
 
 <style>
   #loading-overlay {
@@ -39,7 +29,7 @@ import Taskbar from "../../components/windows/taskbar.astro";
     transition: opacity 0.5s ease-in-out;
   }
 
-  #main-content {
+  #paint-main-content {
     transition: opacity 0.5s ease-in-out;
     overflow: hidden;
   }
@@ -161,7 +151,7 @@ import Taskbar from "../../components/windows/taskbar.astro";
   // Hide loading screen after 5 seconds
   setTimeout(() => {
     const loadingOverlay = document?.getElementById("loading-overlay");
-    const mainContent = document?.getElementById("main-content");
+    const mainContent = document?.getElementById("paint-main-content");
     const canvas = document?.getElementById("canvas") as HTMLCanvasElement;
 
     if (loadingOverlay && mainContent && canvas) {
