@@ -1,48 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslator } from '../../hooks/useTranslator';
-import { LanguageSelector } from '../language-selector/LanguageSelector';
 import { TextArea } from '../texttarea/Texttarea';
-import { ActionButtons } from '../action-button/ActionButton';
 import './styles.css';
 
 export default function Translator() {
+  const [testText, setTestText] = useState('');
+  
   const {
     sourceText,
     translatedText,
-    sourceLanguage,
-    targetLanguage,
+    isSpanishToEnglish,
     isLoading,
-    charCount,
     setSourceText,
-    setSourceLanguage,
-    setTargetLanguage,
-    translateText,
     swapLanguages,
-    speakText,
     clearText
   } = useTranslator();
 
   return (
       <div className="translator-container">
-        {/* Language Selectors */}
+      
+        
+        {/* Language indicator */}
         <div className="language-controls">
-          <LanguageSelector
-            value={sourceLanguage}
-            onChange={setSourceLanguage}
-            showDetect={true}
-          />
+          <span>{isSpanishToEnglish ? 'Español' : 'English'}</span>
           <button 
             className="swap-button"
-            onClick={swapLanguages}
+            onClick={() => {
+              swapLanguages();
+            }}
             title="Intercambiar idiomas"
           >
             ⇄
           </button>
-          <LanguageSelector
-            value={targetLanguage}
-            onChange={setTargetLanguage}
-            showDetect={false}
-          />
+          <span>{isSpanishToEnglish ? 'English' : 'Español'}</span>
         </div>
 
         {/* Text Areas */}
@@ -51,49 +41,26 @@ export default function Translator() {
             <TextArea
               value={sourceText}
               onChange={setSourceText}
-              placeholder="Escribe o pega el texto aquí..."
-              maxLength={5000}
+              placeholder={isSpanishToEnglish ? "Escribe en español..." : "Write in English..."}
+              maxLength={100}
               showCounter={true}
-              charCount={charCount}
+              charCount={sourceText.length}
             />
-            <ActionButtons
-              onSpeak={() => speakText(sourceText, sourceLanguage)}
-              onClear={clearText}
-              showClear={sourceText.length > 0}
-            />
+            <button onClick={() => {
+              clearText();
+            }} disabled={!sourceText}>
+              Limpiar
+            </button>
           </div>
 
           <div className="output-section">
-            <div className="translation-header">Traducción</div>
             <TextArea
               value={translatedText}
-              placeholder={isLoading ? "Traduciendo..." : ""}
+              placeholder={isLoading ? "Traduciendo..." : "Traducción aparecerá aquí..."}
               readOnly={true}
               isLoading={isLoading}
             />
-            {translatedText && (
-              <ActionButtons
-                onSpeak={() => speakText(translatedText, targetLanguage)}
-                showClear={false}
-              />
-            )}
           </div>
-        </div>
-
-        {/* File Upload Area */}
-        {/* <div className="file-upload-area">
-          <p>Arrastra y suelta aquí archivos PDF, Word (.docx) o PowerPoint (.pptx) para traducirlos.</p>
-        </div> */}
-
-        {/* Translate Button */}
-        <div className="translate-section">
-          <button 
-            className="translate-button"
-            onClick={translateText}
-            disabled={!sourceText.trim() || isLoading}
-          >
-            {isLoading ? "Traduciendo..." : "Traducir"}
-          </button>
         </div>
       </div>
   );

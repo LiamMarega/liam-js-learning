@@ -1,76 +1,87 @@
-import { useState, useCallback } from 'react';
-
-interface Language {
-  code: string;
-  name: string;
-}
+import { useState, useCallback, useEffect } from 'react';
 
 export const useTranslator = () => {
+  
   const [sourceText, setSourceText] = useState('');
   const [translatedText, setTranslatedText] = useState('');
-  const [sourceLanguage, setSourceLanguage] = useState('auto');
-  const [targetLanguage, setTargetLanguage] = useState('en');
+  const [isSpanishToEnglish, setIsSpanishToEnglish] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const charCount = sourceText.length;
+  // Función para traducir usando la API
+  const translateText = useCallback(async (text: string) => {
+    if (!text.trim()) {
+      setTranslatedText('');
+      return;
+    }
 
-  // Simulación de traducción (reemplazar con API real)
-  const translateText = useCallback(async () => {
-    if (!sourceText.trim()) return;
-    
     setIsLoading(true);
-    
+    setError(null);
+
     try {
-      // Aquí iría la llamada a la API de Google Translate
-      // Por ahora simulamos con un delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Simulación simple - en producción usar Google Translate API
-      const mockTranslation = `[Traducido de ${sourceLanguage} a ${targetLanguage}]: ${sourceText}`;
-      setTranslatedText(mockTranslation);
-    } catch (error) {
-      console.error('Error al traducir:', error);
-      setTranslatedText('Error en la traducción');
+      const sourceLanguage = isSpanishToEnglish ? 'es' : 'en';
+      const targetLanguage = isSpanishToEnglish ? 'en' : 'es';
+
+      const response = await fetch('/api/translate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text,
+          sourceLanguage,
+          targetLanguage,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Translation failed');
+      }
+
+      setTranslatedText(data.translatedText);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Translation error');
+      setTranslatedText('');
     } finally {
       setIsLoading(false);
     }
-  }, [sourceText, sourceLanguage, targetLanguage]);
+  }, [isSpanishToEnglish]);
+
+  // Efecto para traducir cuando cambia el texto o idioma
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      translateText(sourceText);
+    }, 500); // Debounce de 500ms
+
+    return () => clearTimeout(timeoutId);
+  }, [sourceText, translateText]);
+
+  const handleSetSourceText = useCallback((text: string) => {
+    setSourceText(text);
+  }, []);
 
   const swapLanguages = useCallback(() => {
-    if (sourceLanguage === 'auto') return;
-    
-    setSourceLanguage(targetLanguage);
-    setTargetLanguage(sourceLanguage);
+    setIsSpanishToEnglish(!isSpanishToEnglish);
     setSourceText(translatedText);
     setTranslatedText(sourceText);
-  }, [sourceLanguage, targetLanguage, sourceText, translatedText]);
-
-  const speakText = useCallback((text: string, language: string) => {
-    if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = language === 'auto' ? 'es-ES' : language;
-      speechSynthesis.speak(utterance);
-    }
-  }, []);
+  }, [isSpanishToEnglish, sourceText, translatedText]);
 
   const clearText = useCallback(() => {
     setSourceText('');
     setTranslatedText('');
+    setError(null);
   }, []);
 
   return {
     sourceText,
     translatedText,
-    sourceLanguage,
-    targetLanguage,
+    isSpanishToEnglish,
     isLoading,
-    charCount,
-    setSourceText,
-    setSourceLanguage,
-    setTargetLanguage,
-    translateText,
+    error,
+    setSourceText: handleSetSourceText,
     swapLanguages,
-    speakText,
     clearText
   };
 };

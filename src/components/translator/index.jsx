@@ -3,7 +3,6 @@ import "./styles/styles.css";
 import Translator from "./components/translator/Translator";
 
 export default function TranslatorContent() {
-  return (
-   <Translator />
-  );
+  
+  return  <Translator />
 }

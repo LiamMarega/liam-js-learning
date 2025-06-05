@@ -56,9 +56,9 @@
   
   .input-section,
   .output-section {
-    border: 2px inset #c0c0c0;
+    border: 1px solid #c0c0c0;
     background: white;
-    padding: 8px;
+    /* padding: 8px; */
     display: flex;
     flex-direction: column;
     flex: 1;

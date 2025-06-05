@@ -44,12 +44,12 @@ import TranslatorContent from "../components/translator/index.jsx";
   </WindowModal>
   <WindowModal
     title="Translator"
-    isOpen={false}
+    isOpen={true}
     width="70vw"
     height="65vh"
     path="/translator"
   >
-    <TranslatorContent />
+    <TranslatorContent client:load />
   </WindowModal>
 </Layout>
 
